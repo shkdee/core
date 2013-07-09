@@ -420,7 +420,7 @@ var FileList={
 				files: '</span><span class="fileinfo"><span class="files">'+ totalfiles + '</span>'
 			}, {escapeFunction: null})[0].outerHTML;
 
-			var filesize = '<td class="filesize">'+simpleFileSize(totalsize)+'</td>';
+			var filesize = '<td class="filesize" title="'+humanFileSize(totalsize)+'">'+simpleFileSize(totalsize)+'</td>';
 
 			$('#fileList').append('<tr class="summary"><td>'+info+'</td>'+filesize+'<td></td></tr>');
 
@@ -442,11 +442,15 @@ var FileList={
 			$.each($('tr[data-file]'), function(index, value) {
 				if (value.dataset.type === 'dir') { totaldirs++; }
 				else if (value.dataset.type === 'file') { totalfiles++; }
-				totalsize += parseInt(value.dataset.size);
+				if (value.dataset.size !== undefined) {
+					console.log(value.dataset.size);
+					totalsize += parseInt(value.dataset.size);
+				}
 			});
 			$('.summary .dirs').html(totaldirs);
 			$('.summary .files').html(totalfiles);
 			$('.summary .filesize').html(simpleFileSize(totalsize));
+			$('.summary .filesize').attr('title', humanFileSize(totalsize));
 			if ($('.summary .dirs').html() === "0") {
 				$('.summary .dirinfo').hide();
 				$('.summary .connector').hide();
