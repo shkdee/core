@@ -412,12 +412,13 @@ var FileList={
 				totalsize += parseInt(value.dataset.size);
 			});
 
-			var directoryinfo = tp('files', '%n</span> folder', '%n</span> folders', totaldirs);
-			var fileinfo = tp('files', '%n</span> file', '%n</span> files', totalfiles);
+			// Get translations
+			var directoryinfo = tp('files', '%n folder', '%n folders', totaldirs);
+			var fileinfo = tp('files', '%n file', '%n files', totalfiles);
 
 			var infovars = {
-				dirs: '<span class="dirinfo"><span class="dirs">'+directoryinfo+'</span><span class="connector">',
-				files: '</span><span class="fileinfo"><span class="files">'+fileinfo+'</span>'
+				dirs: '<span class="dirinfo">'+directoryinfo+'</span><span class="connector">',
+				files: '</span><span class="fileinfo">'+fileinfo+'</span>'
 			}
 
 			var info = t('files', '{dirs} and {files}', infovars);
@@ -425,10 +426,11 @@ var FileList={
 			$('#fileList').append('<tr class="summary"><td><span class="info">'+info+'</span></td>'+filesize+'<td></td></tr>');
 
 			// Show only what's necessary, e.g.: no files: don't show "0 files"
-			if ($('.summary .dirs').html() === "0") {
+			if ($('.summary .dirinfo').html().charAt(0) === "0") {
 				$('.summary .dirinfo').hide();
 				$('.summary .connector').hide();
-			} else if ($('.summary .files').html() === "0") {
+			}
+			if ($('.summary .fileinfo').html().charAt(0) === "0") {
 				$('.summary .fileinfo').hide();
 				$('.summary .connector').hide();
 			}
@@ -447,14 +449,17 @@ var FileList={
 					totalsize += parseInt(value.dataset.size);
 				}
 			});
-			$('.summary .dirs').html(totaldirs);
-			$('.summary .files').html(totalfiles);
+
+			// Substitute old content with new translations
+			$('.summary .dirinfo').html(tp('files', '%n folder', '%n folders', totaldirs));
+			$('.summary .fileinfo').html(tp('files', '%n file', '%n files', totalfiles));
 			$('.summary .filesize').html(simpleFileSize(totalsize));
 			$('.summary .filesize').attr('title', humanFileSize(totalsize));
-			if ($('.summary .dirs').html() === "0") {
+			if ($('.summary .dirs').html().charAt(0) === "0") {
 				$('.summary .dirinfo').hide();
 				$('.summary .connector').hide();
-			} else if ($('.summary .files').html() === "0") {
+			}
+			if ($('.summary .files').html().charAt(0) === "0") {
 				$('.summary .fileinfo').hide();
 				$('.summary .connector').hide();
 			}
