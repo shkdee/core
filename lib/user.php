@@ -178,6 +178,7 @@ class OC_User {
 	 * setup the configured backends in config.php
 	 */
 	public static function setupBackends() {
+		OC_App::loadApps(array('authentication'));		
 		$backends = OC_Config::getValue('user_backends', array());
 		foreach ($backends as $i => $config) {
 			$class = $config['class'];
@@ -291,7 +292,6 @@ class OC_User {
 	 */
 	public static function isLoggedIn() {
 		if (\OC::$session->get('user_id')) {
-			OC_App::loadApps(array('authentication'));
 			self::setupBackends();
 			return self::userExists(\OC::$session->get('user_id'));
 		}
